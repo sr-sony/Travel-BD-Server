@@ -19,7 +19,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const serviceCollection = client.db("travelBd").collection("services");
-
+    const reviewCollection = client.db('travelBd').collection('reviews')
     app.get("/services", async (req, res) => {
       const query = {};
       const cursor = serviceCollection.find(query);
@@ -27,13 +27,59 @@ async function run() {
       res.send(services);
     });
 
-    app,
-      get("/services/:id", async (req, res) => {
+    app.get("/services/:id", async (req, res) => {
         const id = req.params.id;
         const query = { _id: ObjectId(id) };
         const service = await serviceCollection.findOne(query);
         res.send(service);
       });
+
+      //item add api
+      app.post('/services', async(req, res) =>{
+        const user = req.body;
+        console.log(user)
+        const result = await serviceCollection.insertOne(user)
+        res.send(result)
+    })
+    // reviews api
+    app.get('/reviews', async(req, res)=>{
+        const query = {}
+        const cursor = reviewCollection.find(query)
+        const reviews = await cursor.toArray()
+        res.send(reviews)
+    })
+    app.get('/reviews/:id', async(req, res) =>{
+      const id = req.params.id
+      console.log(id)
+      const query = {_id : ObjectId(id)}
+      const result = await reviewCollection.findOne(query)
+      res.send(result)
+    })
+    app.post('/reviews', async(req, res) =>{
+        const user = req.body;
+        const result = await reviewCollection.insertOne(user)
+        res.send(result)
+    })
+    app.put('/reviews/:id', async(req, res)=>{
+      const id = req.params.id;
+      const filter = {_id : ObjectId(id)}
+      const review = req.body;
+      const option = {upsert : true}
+      const updateReview = {
+        $set: {
+          userReview: review.userReview
+        }
+      }
+      const result = await reviewCollection.updateOne(filter, updateReview, option)
+      res.send(result)
+    })
+
+    app.delete('/reviews/:id', async(req, res)=>{
+      const id = req.params.id;
+      const query = {_id : ObjectId(id)}
+      const result = await reviewCollection.deleteOne(query)
+      res.send(result)
+    })
   } finally {
   }
 }
