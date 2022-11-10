@@ -19,6 +19,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    //item card collection
     const serviceCollection = client.db("travelBd").collection("services");
     const reviewCollection = client.db('travelBd').collection('reviews')
     app.get("/services", async (req, res) => {
