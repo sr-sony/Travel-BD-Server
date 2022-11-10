@@ -23,7 +23,8 @@ async function run() {
     const serviceCollection = client.db("travelBd").collection("services");
     //review collection
     const reviewCollection = client.db('travelBd').collection('reviews');
-    
+
+    //get all item card
     app.get("/services", async (req, res) => {
       const query = {};
       const cursor = serviceCollection.find(query).sort({_id: -1});
@@ -31,6 +32,7 @@ async function run() {
       res.send(services);
     });
 
+    //get item card for homepage
     app.get("/allitems", async (req, res) => {
       const query = {};
       const cursor = serviceCollection.find(query).sort({_id: -1});
