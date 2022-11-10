@@ -22,8 +22,15 @@ async function run() {
     const reviewCollection = client.db('travelBd').collection('reviews')
     app.get("/services", async (req, res) => {
       const query = {};
-      const cursor = serviceCollection.find(query);
+      const cursor = serviceCollection.find(query).sort({_id: -1});
       const services = await cursor.toArray();
+      res.send(services);
+    });
+
+    app.get("/allitems", async (req, res) => {
+      const query = {};
+      const cursor = serviceCollection.find(query).sort({_id: -1});
+      const services = await cursor.limit(3).toArray();
       res.send(services);
     });
 
