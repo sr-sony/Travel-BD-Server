@@ -21,7 +21,9 @@ async function run() {
   try {
     //item card collection
     const serviceCollection = client.db("travelBd").collection("services");
-    const reviewCollection = client.db('travelBd').collection('reviews')
+    //review collection
+    const reviewCollection = client.db('travelBd').collection('reviews');
+    
     app.get("/services", async (req, res) => {
       const query = {};
       const cursor = serviceCollection.find(query).sort({_id: -1});
